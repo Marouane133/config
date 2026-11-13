@@ -1,13 +1,12 @@
-$path = "C:\path\credential_file"
-$bytes = [System.IO.File]::ReadAllBytes($path)
-$chunkSize = 1152
+$hex = (Get-Content ".\hex.txt" -Raw).Trim()
+$chunkSize = [int][Math]::Ceiling($hex.Length / 10)
 
 New-Item -ItemType Directory -Path ".\hex_chunks" -Force | Out-Null
 
-for ($i = 0; $i -lt $bytes.Length; $i += $chunkSize) {
-    $length = [Math]::Min($chunkSize, $bytes.Length - $i)
-    $hex = [BitConverter]::ToString($bytes, $i, $length).Replace("-", "")
+for ($i = 0; $i -lt $hex.Length; $i += $chunkSize) {
+    $length = [Math]::Min($chunkSize, $hex.Length - $i)
+    $chunk = $hex.Substring($i, $length)
 
     $filename = ".\hex_chunks\chunk_{0:D3}.txt" -f [int]($i / $chunkSize)
-    Set-Content -Path $filename -Value $hex
+    Set-Content -Path $filename -Value $chunk
 }
