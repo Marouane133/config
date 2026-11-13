@@ -1,6 +1,6 @@
 $path = "C:\path\credential_file"
 $bytes = [System.IO.File]::ReadAllBytes($path)
-$chunkSize = 512
+$chunkSize = 1152
 
 New-Item -ItemType Directory -Path ".\hex_chunks" -Force | Out-Null
 
